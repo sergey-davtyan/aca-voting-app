@@ -43,8 +43,23 @@ Access the applications:
 - **Vote App**: `http://<node-ip>:31000` (NodePort)
 - **Result App**: `http://<node-ip>:31001` (NodePort)
 
-To delete all deployed resources:
+## Monitoring & Logging Stack (Prometheus, Loki, Promtail, Grafana)
+
+A complete monitoring and logging stack is available in [k8s-specifications/monitoring/](file:///Users/sergey.davtyan/code/aca-voting-app/k8s-specifications/monitoring):
+- **Prometheus** (metrics): NodePort `30090`
+- **Loki** (log aggregation): ClusterIP `3100`
+- **Promtail** (log shipper): Runs as a **DaemonSet** collecting `/var/log/pods` from all nodes
+- **Grafana** (dashboard): NodePort `32000` (pre-configured with Prometheus and Loki data sources)
+
+To deploy monitoring:
 
 ```bash
-kubectl delete -f k8s-specifications/
+kubectl apply -f k8s-specifications/monitoring/
 ```
+
+To delete monitoring:
+
+```bash
+kubectl delete -f k8s-specifications/monitoring/
+```
+
