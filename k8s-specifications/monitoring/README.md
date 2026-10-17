@@ -40,6 +40,20 @@ kubectl get pods -l 'app in (prometheus, loki, promtail, grafana)'
   - `Prometheus`: Pre-configured as the default metrics source (`http://prometheus:9090`).
   - `Loki`: Pre-configured as the log exploration source (`http://loki:3100`).
 
+- **Pre-Provisioned Dashboards**:
+  Navigate to **Dashboards** > **Voting App** folder:
+  1. **Voting App - Operations & Observability**:
+     - Live KPI stats (active pods, total CPU, total memory, restarts).
+     - Filterable by service (`vote`, `result`, `worker`, `redis`, `db`, or `All`).
+     - Real-time CPU and Memory usage per pod.
+     - Ingress/Egress Network I/O rates.
+     - Live container logs streamed from Loki.
+     - Filtered Warning & Error log stream.
+  2. **Kubernetes - Cluster & Node Resources**:
+     - Cluster-wide CPU & memory gauges.
+     - Tracked node and pod counts.
+     - Top 10 consuming pods by CPU and Memory.
+
 To explore application logs in Grafana:
 1. Navigate to **Explore** in the left sidebar.
 2. Select the **Loki** data source.
