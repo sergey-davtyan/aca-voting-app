@@ -14,11 +14,13 @@ spec:
       labels:
         app: worker
     spec:
+      imagePullSecrets:
+      - name: ecr-secret
       containers:
       - name: worker
-        # Build locally: docker build -t aca-voting-app-worker:latest ./worker
-        image: aca-voting-app-worker:latest
-        imagePullPolicy: IfNotPresent
+        # AWS ECR Private Registry Image
+        image: 597936860210.dkr.ecr.eu-north-1.amazonaws.com/aca-voting-app-worker:latest
+        imagePullPolicy: Always
         envFrom:
         - configMapRef:
             name: voting-app-config
