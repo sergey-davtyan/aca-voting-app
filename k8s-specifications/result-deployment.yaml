@@ -14,11 +14,13 @@ spec:
       labels:
         app: result
     spec:
+      imagePullSecrets:
+      - name: ecr-secret
       containers:
       - name: result
-        # Build locally: docker build -t aca-voting-app-result:latest ./result
-        image: aca-voting-app-result:latest
-        imagePullPolicy: IfNotPresent
+        # AWS ECR Private Registry Image
+        image: 597936860210.dkr.ecr.eu-north-1.amazonaws.com/aca-voting-app-result:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 80
           name: result
