@@ -43,6 +43,22 @@ Access the applications:
 - **Vote App**: `http://<node-ip>:31000` (NodePort)
 - **Result App**: `http://<node-ip>:31001` (NodePort)
 
+## ECR Private Registry Authentication
+
+Workloads using the AWS ECR registry (`597936860210.dkr.ecr.eu-north-1.amazonaws.com`) reference an image pull secret named `ecr-secret`.
+
+- [ecr-secret.yaml](file:///Users/sergey.davtyan/code/aca-voting-app/k8s-specifications/ecr-secret.yaml): Contains the `kubernetes.io/dockerconfigjson` secret manifest.
+- [ecr-renew-cronjob.yaml](file:///Users/sergey.davtyan/code/aca-voting-app/k8s-specifications/ecr-renew-cronjob.yaml): (Optional) Runs every 6 hours inside the cluster to automatically renew `ecr-secret` since AWS ECR tokens expire after 12 hours.
+
+To generate or refresh `ecr-secret.yaml` on a machine with AWS CLI & kubectl:
+```bash
+kubectl create secret docker-registry ecr-secret \
+  --docker-server=597936860210.dkr.ecr.eu-north-1.amazonaws.com \
+  --docker-username=AWS \
+  --docker-password=$(aws ecr get-login-password --region eu-north-1) \
+  --dry-run=client -o yaml > k8s-specifications/ecr-secret.yaml
+```
+
 ## Monitoring & Logging Stack (Prometheus, Loki, Promtail, Grafana)
 
 A complete monitoring and logging stack is available in [k8s-specifications/monitoring/](file:///Users/sergey.davtyan/code/aca-voting-app/k8s-specifications/monitoring):
