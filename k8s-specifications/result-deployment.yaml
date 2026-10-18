@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: result
   labels:
     app: result
-  name: result
 spec:
   replicas: 1
   selector:
@@ -14,9 +14,37 @@ spec:
       labels:
         app: result
     spec:
+      imagePullSecrets:
+      - name: ecr-secret
       containers:
-      - image: dockersamples/examplevotingapp_result
-        name: result
+      - name: result
+        # AWS ECR Private Registry Image
+        image: 597936860210.dkr.ecr.eu-north-1.amazonaws.com/aca-voting-app-result:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 80
           name: result
+        envFrom:
+        - configMapRef:
+            name: voting-app-config
+        - secretRef:
+            name: voting-app-secrets
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 250m
+            memory: 256Mi
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
